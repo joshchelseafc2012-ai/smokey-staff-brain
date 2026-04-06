@@ -87,7 +87,7 @@ Never mention AI, models, or APIs.`;
       message_count: (conversationHistory || []).length + 1
     });
 
-    // Call Claude API
+    // Call Claude API with streaming
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -98,6 +98,7 @@ Never mention AI, models, or APIs.`;
       body: JSON.stringify({
         model: 'claude-opus-4-1',
         max_tokens: 1024,
+        stream: true,
         system: finalPrompt,
         messages: [
           ...(conversationHistory || []),
@@ -112,12 +113,65 @@ Never mention AI, models, or APIs.`;
       throw new Error(`Claude API error: ${response.status} ${response.statusText} - ${errorData}`);
     }
 
-    const data = await response.json();
-    const reply = data.content[0]?.text || 'The Brain is thinking…';
+    // Stream Claude's response back to client as line-delimited JSON
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let accumulatedText = '';
 
-    return new Response(JSON.stringify({ reply }), {
+    // Read stream chunks and forward to client
+    const encoder = new TextEncoder();
+    const chunks = [];
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+
+            // Extract text from content_block_delta events
+            if (data.type === 'content_block_delta' && data.delta?.type === 'text_delta') {
+              const text = data.delta.text;
+              accumulatedText += text;
+              // Send chunk to client as line-delimited JSON
+              chunks.push(JSON.stringify({ type: 'text', content: text }));
+            }
+          } catch (e) {
+            // Ignore parsing errors on individual lines
+          }
+        }
+      }
+    }
+
+    // Process any remaining buffer
+    if (buffer) {
+      if (buffer.startsWith('data: ')) {
+        try {
+          const data = JSON.parse(buffer.slice(6));
+          if (data.type === 'content_block_delta' && data.delta?.type === 'text_delta') {
+            const text = data.delta.text;
+            accumulatedText += text;
+            chunks.push(JSON.stringify({ type: 'text', content: text }));
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
+    }
+
+    // Send all chunks back as line-delimited JSON
+    const responseBody = chunks.join('\n') + '\n' + JSON.stringify({ type: 'done' });
+
+    return new Response(responseBody, {
       status: 200,
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/x-ndjson" }
     });
   } catch (error) {
     console.error("Chat error:", error);

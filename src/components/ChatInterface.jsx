@@ -234,10 +234,69 @@ export default function ChatInterface({
         throw new Error(`API error: ${response.statusText}`)
       }
 
-      const data = await response.json()
-      const aiMessage = data.reply || 'The Brain is thinking…'
+      // Handle streaming response
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let accumulatedText = ''
 
-      setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }])
+      // Create empty assistant message that we'll update with streamed content
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }])
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || '' // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const data = JSON.parse(line)
+
+              if (data.type === 'text') {
+                // Accumulate text and update message in real-time
+                accumulatedText += data.content
+                setMessages(prev => {
+                  const updated = [...prev]
+                  updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: accumulatedText
+                  }
+                  return updated
+                })
+              } else if (data.type === 'done') {
+                // Stream complete
+                break
+              }
+            } catch (e) {
+              // Ignore parsing errors
+            }
+          }
+        }
+      }
+
+      // Process any remaining buffer
+      if (buffer.trim()) {
+        try {
+          const data = JSON.parse(buffer)
+          if (data.type === 'text') {
+            accumulatedText += data.content
+            setMessages(prev => {
+              const updated = [...prev]
+              updated[updated.length - 1] = {
+                role: 'assistant',
+                content: accumulatedText
+              }
+              return updated
+            })
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
     } catch (error) {
       console.error('Chat error:', error)
       setMessages(prev => [...prev, {
