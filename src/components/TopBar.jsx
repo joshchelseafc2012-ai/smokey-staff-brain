@@ -73,7 +73,7 @@ function getTodaysHours(shopId) {
   }
 }
 
-export default function TopBar({ selectedShop, onShopChange, onMenuToggle, onGuideSelect }) {
+export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
   const shop = SHOP_INFO[selectedShop] || SHOP_INFO.tolworth
   const todaysHours = getTodaysHours(selectedShop)
   const isOpen = todaysHours !== 'Closed'
@@ -100,7 +100,7 @@ export default function TopBar({ selectedShop, onShopChange, onMenuToggle, onGui
       </div>
 
       <div className="topbar-dropdowns">
-        <GuideSelector onGuideSelect={onGuideSelect} />
+        <GuideSelector />
         <ShopSelector selectedShop={selectedShop} onShopChange={onShopChange} />
       </div>
     </div>

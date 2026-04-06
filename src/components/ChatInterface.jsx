@@ -316,13 +316,6 @@ export default function ChatInterface({
     }, 0)
   }
 
-  const handleGuideSelect = (query) => {
-    setInput(query)
-    setTimeout(() => {
-      handleSendMessage(query)
-    }, 0)
-  }
-
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion)
   }
@@ -346,7 +339,7 @@ export default function ChatInterface({
 
   return (
     <div className="chat-layout">
-      <TopBar selectedShop={selectedShop} onShopChange={onShopChange} onMenuToggle={() => setSidebarOpen(!sidebarOpen)} onGuideSelect={handleGuideSelect} />
+      <TopBar selectedShop={selectedShop} onShopChange={onShopChange} onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="main-container">
         <Sidebar

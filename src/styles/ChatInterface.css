@@ -45,6 +45,7 @@
   resize: none;
   max-height: 120px;
   transition: all 0.2s;
+  scroll-margin-top: 250px;
 }
 
 .message-input::placeholder {
