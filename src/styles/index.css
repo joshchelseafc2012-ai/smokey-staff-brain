@@ -16,6 +16,13 @@
   --green: #27ae60;
 }
 
+/* Scroll padding to account for sticky topbar on mobile */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 220px;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
