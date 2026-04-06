@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smokey Barbers — Staff Brain</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080808;
+    --surface: #111111;
+    --panel: #181818;
+    --raised: #202020;
+    --border: #2a2a2a;
+    --border-bright: #383838;
+    --gold: #C9A84C;
+    --gold-dim: #7a5e25;
+    --gold-glow: rgba(201,168,76,0.12);
+    --gold-subtle: rgba(201,168,76,0.06);
+    --text: #d4d4d4;
+    --text-dim: #686868;
+    --text-bright: #f0f0f0;
+    --red: #c0392b;
+    --green: #27ae60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--void);
+    flex-direction: column;
+    gap: 0;
+    animation: fade-in 0.6s ease;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 0 24px;
+  }
+
+  .logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .logo-img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 24px rgba(201,168,76,0.3));
+  }
+
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .brand-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .login-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 32px 0;
+  }
+
+  .login-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 16px;
+    color: var(--text-bright);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: var(--gold-dim); }
+  .login-input::placeholder { color: var(--text-dim); }
+
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    border: none;
+    border-radius: 6px;
+    color: #0a0a0a;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+  .login-btn:hover { background: #d4b45a; transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 8px;
+    text-align: center;
+    min-height: 18px;
+  }
+
+  .login-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .login-footer span { color: var(--gold-dim); }
+
+  /* ─── MAIN APP ─── */
+  #app {
+    display: none;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 64px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .topbar-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(201,168,76,0.2));
+  }
+
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+
+  .topbar-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--raised);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 8px;
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+  }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    color: #0a0a0a;
+    letter-spacing: 0.05em;
+  }
+
+  .user-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .logout-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    padding: 6px 12px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .logout-btn:hover { border-color: var(--border-bright); color: var(--text); }
+
+  /* LAYOUT */
+  .app-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: calc(100vh - 64px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-section {
+    padding: 0 20px;
+    margin-bottom: 32px;
+  }
+
+  .sidebar-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+  .sidebar-btn:hover { background: var(--raised); color: var(--text); }
+  .sidebar-btn.active {
+    background: var(--gold-subtle);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  .sidebar-btn .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 20px 24px;
+  }
+
+  .quick-topics {
+    padding: 0 20px;
+    flex: 1;
+  }
+
+  .topic-chip {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: all 0.15s;
+    font-family: 'Barlow', sans-serif;
+  }
+  .topic-chip:hover {
+    border-color: var(--gold-dim);
+    color: var(--text);
+    background: var(--gold-subtle);
+  }
+
+  /* CHAT AREA */
+  .chat-area {
+    display: flex;
+    flex-direction: column;
+    background: var(--void);
+    position: relative;
+  }
+
+  /* WELCOME STATE */
+  #welcome-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .welcome-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 16px rgba(201,168,76,0.2));
+  }
+
+  .welcome-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .welcome-sub {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 420px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .welcome-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .welcome-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .welcome-card:hover {
+    border-color: var(--gold-dim);
+    background: var(--gold-subtle);
+    transform: translateY(-2px);
+  }
+  .welcome-card .wc-icon { font-size: 20px; margin-bottom: 8px; }
+  .welcome-card .wc-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .welcome-card .wc-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* CHAT MESSAGES */
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
+  }
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg { display: flex; flex-direction: column; animation: msg-in 0.3s ease; }
+  @keyframes msg-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .msg-meta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .msg-user { align-items: flex-end; }
+  .msg-user .msg-meta { color: rgba(201,168,76,0.5); }
+  .msg-user .bubble {
+    max-width: 68%;
+    background: var(--raised);
+    border: 1px solid var(--border-bright);
+    border-radius: 14px 14px 2px 14px;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: var(--text-bright);
+    line-height: 1.6;
+  }
+
+  .msg-assistant { align-items: flex-start; }
+  .msg-assistant .msg-meta { color: var(--gold-dim); }
+  .msg-assistant .bubble {
+    max-width: 80%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px 14px 14px 14px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .bubble strong { color: var(--gold); font-weight: 600; }
+  .bubble em { color: #a0b8d0; }
+  .bubble h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 16px 0 8px;
+    font-weight: 600;
+  }
+  .bubble ul { margin: 8px 0 8px 18px; }
+  .bubble li { margin-bottom: 5px; }
+
+  /* TYPING */
+  .typing-wrap { display: flex; flex-direction: column; align-items: flex-start; }
+  .typing-dots {
+    display: flex; gap: 5px;
+    padding: 14px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px 14px 14px 14px;
+  }
+  .typing-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-dim);
+    animation: dot-bounce 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.18s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+    40% { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* INPUT BAR */
+  .input-bar {
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .input-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px 10px 16px;
+    transition: border-color 0.2s;
+  }
+  .input-wrap:focus-within { border-color: var(--gold-dim); }
+
+  #chat-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-bright);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    resize: none;
+    min-height: 24px;
+    max-height: 120px;
+    line-height: 1.5;
+  }
+  #chat-input::placeholder { color: var(--text-dim); font-style: italic; }
+
+  #send-btn {
+    width: 38px; height: 38px;
+    background: var(--gold);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  #send-btn:hover { background: #d4b45a; transform: translateY(-1px); }
+  #send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  #send-btn svg { width: 16px; height: 16px; fill: #0a0a0a; }
+
+  .input-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+  /* STATUS DOT */
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* MOBILE */
+  @media (max-width: 700px) {
+    .app-body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .welcome-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ LOGIN ═══════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="logo-wrap">
+      <img class="logo-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAngMBIgACEQEDEQH/xAAbAAEAAQUBAAAAAAAAAAAAAAAABgEDBAUHAv/EAD8QAAEEAQICBgcECAYDAAAAAAEAAgMEEQUSITEGE0FRYZEUFSIycYGhI1KxwUJDVZKT4fDxByQzcnOCFlNU/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAEDBAUCBv/EACQRAAICAgICAgIDAAAAAAAAAAABAhEDBBIhMVEFEyKhMkFh/9oADAMBAAIRAxEAPwDhqIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiAqmEWRWqz2n7K0Mkr+5jcp47Bj4TC2fqHV/2bZ/hlPUOrfs6z+4V55x9nri/RrMJhbP1Dq/7Ns/uFU9Q6rnHq6wP+hTnH2Rxfo1qosmzTsVTizBJFnlvaW5WOV6IKIiIAiIgCIiAIiIAiIgKhFRem8+CAkvQno8zV7L7FtuacBw5ucb3dg+HaV2To9Rgr1t0MEUbc4a1rAA0eA7FE+ilRlTo9Sa1m10kQlefvF3HPlhSapqhrQtiEIdjjnrMZ+i+d+RzZMk3GL6R0daEYq2b3A7gmB3BaY9IGg4MEYP8AzfyVfX7f/nb/ABf5Lk/XlNnKJuMN7grc9eKdu2RoPiByWr/8gA/UN/i/yXk68XgiKCPfjh9rnj5KVjyeyLia3U6UL3yVLEcc8bf0XtBB81zTpt0eg0l8Vmgx4rTHa5ruIY/HIHx4rpZklke50oGTx4Ozx8lqelNVtzQLkZHFrN7f9zeI/D8V1dLYnjmoyfTMebHGStHIHcDhUVTzVF9Ec8IiIAiIgCIiAIiICoXuJjpHBjGlzncGtAyST2BW1IOhMLX66yZ/BtWN05J7McB9SFDfFNhKzonWWq0MEbhVqxMAiMkz8e6AOAGOHzWRVuSSNkdBY0uYxuAP2W/PEj7/AILmOo3JdUtyWrZDnSOLg39Fo7MDsWNsYTktGe/CwvRUu2afvrqjs7Na1Ot1bfVladrwCBDIY3EHlhpGD5rbaTrNXVN7YdzJoziSGQYe35LhtS/cpTMlq2po3s90h5IGOXAqX0dVmfRq6xE0MsxOdXke0HaRt/sVh2PjlXRfi2Wyeaj0ggq2HVKsL7lprS50cZA2gc8k8Fr7Gq6hPFvNWjDHnb9oDKQcZ58FCdW1W1pFKnHTJhsWmGeSVwOTnhnj35PmorLNLNu66aSQO57nkr3g+Ni42Rk2WnR02xd2TPjmuaXHI1ucbdnHAOPf8VR1l7Imi5FH1UrSGzROy08xg92ceK5dsb90eS3fRPUH1NTjqFw9GtAxPa7jtyOY7u7gtMtJRV+ipbDfREZQBI8DkCV4WTqdf0PUbVU/qJnx/ukj8ljLomUIiIAiIgCIiAIiICo5qTdBWl1zUtvV5GnSH28Y95n1UZCkPQZ7PXToJH7W2IHxfEnBA+i8ZP4MmPkw2YDG45YVVctVpaFqSpaYYpojhzXc8dn0V2jQsahJsrR5GcOkdwYz4nsU8lVinZagglszMhrxuklecNa0ZJU40fTYW+j04x10cBL7TiQGmR3YD9FY0XSWQuMNI7pw7/Mahn3W9rYx+ak8MUVeFsNdu2NvLxPaT4rl7m2l0jXhw12yHaxpT7FbqGMk9YUsjqsf6kWcjHeR/XNRRdatVGXWNAkMVqPPUTjgWn7p8D+ah+raGLMzxHGypqDAetie4hk7u9vc48PZ/urNTbjJUyMuH+0RVZuigu1mgBtyZ243cvmsSaOSvJ1ViN8UmM7XjBW06L03XdVjl25rVj1s8meDB2ZK3za4mZLs1XS4Y6S6gMtOJebeXJadZ2sWPTdWu2mnLZp3vbnuJOPosJeoqkkQ/JRERSQEREAREQBERAFcikdG8PYS1zTkEHBB8FbVcoDoOkWpNbq13Prw6jaB+0bLDl5cD3jswtwynZZ/ldTidRrnMja4YGxnHaAOeOXE/JR//DihLcjuGtK2KyBvizzeW44fVdD1iSPUui8d2ZoYYZGSPwOLdrgHjyyFxtvM4ZeC8G7DFOHJmGIxRhbE73+Dn95cR+XL5KxLeij4kk+IwG+ZI+gWNcnfqerymL7Rpkc2HAyMA8XfRXWHT6z29ZZD5Xf+uPrD+8SAfksv192+2W2XY7bX8ebTwwRg/LiQfPPgrmqRx2qPXSNDjEWtc7HvNJwPI4WKYqtv2qMzHyHk3ZsLvDGcO+RyrVK3sgu1pBgPhcYg84xI3B2+YGEWOnaF+zAt7vaZPELsUMe3bYhEvVDHAZyDnw4rd1dArQaKZdfDa8D27fRKn2eQeQdji53gs7S9JLdQjgnGWV29fJn9Y8+7n6n5BWJ7Mes6w91lxNKAHYzP+oeXD4/hgdqslnk/xi/AUEu2RWXodpc8brjmz06z3YgjZJvklPYG54Y7c/3Wg13oc/StOfdZcbKGYLoizBAPjk5xw7l0C1JJqXpNskj2HMr4/Rb3j4keWFo9dmdY0m3LIMNNAjiMjfubn8vNa8GxklJKyjJiglaOYoiLqGMIiIAiIgCIiAIiICp5qTdBWl1zUtvV5GnSH28Y95n1UZCkPQZ7PXToJH7W2IHxfEnBA+i8ZP4MmPkw2YDG45YVVctVpaFqSpaYYpojhzXc8dn0V2jQsahJsrR5GcOkdwYz4nsU8lVinZagglszMhrxuklecNa0ZJU40fTYW+j04x10cBL7TiQGmR3YD9FY0XSWQuMNI7pw7/Mahn3W9rYx+ak8MUVeFsNdu2NvLxPaT4rl7m2l0jXhw12yHaxpT7FbqGMk9YUsjqsf6kWcjHeR/XNRRdatVGXWNAkMVqPPUTjgWn7p8D+ah+raGLMzxHGypqDAetie4hk7u9vc48PZ/urNTbjJUyMuH+0RVZuigu1mgBtyZ243cvmsSaOSvJ1ViN8UmM7XjBW06L03XdVjl25rVj1s8meDB2ZK3za4mZLs1XS4Y6S6gMtOJebeXJadZ2sWPTdWu2mnLZp3vbnuJOPosJeoqkkQ/JRERSQEREAREQBERAFcikdG8PYS1zTkEHBB8FbVcoDoOkWpNbq13Prw6jaB+0bLDl5cD3jswtwynZZ/ldTidRrnMja4YGxnHaAOeOXE/JR//DihLcjuGtK2KyBvizzeW44fVdD1iSPUui8d2ZoYYZGSPwOLdrgHjyyFxtvM4ZeC8G7DFOHJmGIxRhbE73+Dn95cR+XL5KxLeij4kk+IwG+ZI+gWNcnfqerymL7Rpkc2HAyMA8XfRXWHT6z29ZZD5Xf+uPrD+8SAfksv192+2W2XY7bX8ebTwwRg/LiQfPPgrmqRx2qPXSNDjEWtc7HvNJwPI4WKYqtv2qMzHyHk3ZsLvDGcO+RyrVK3sgu1pBgPhcYg84xI3B2+YGEWOnaF+zAt7vaZPELsUMe3bYhEvVDHAZyDnw4rd1dArQaKZdfDa8D27fRKn2eQeQdji53gs7S9JLdQjgnGWV29fJn9Y8+7n6n5BWJ7Mes6w91lxNKAHYzP+oeXD4/hgdqslnk/xi/AUEu2RWXodpc8brjmz06z3YgjZJvklPYG54Y7c/3Wg13oc/StOfdZcbKGYLoizBAPjk5xw7l0C1JJqXpNskj2HMr4/Rb3j4keWFo9dmdY0m3LIMNNAjiMjfubn8vNa8GxklJKyjJiglaOYoiLqGMIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCIiA" alt="Smokey Barbers" />
+      <div class="brand-name">Smokey Barbers</div>
+      <div class="brand-sub">Staff Brain · Internal Portal</div>
+    </div>
+
+    <div class="login-divider"></div>
+
+    <div class="login-label">Staff ID / Username</div>
+    <input class="login-input" type="text" id="login-user" placeholder="e.g. jake.leeds" />
+
+    <div class="login-label">Access Code</div>
+    <input class="login-input" type="password" id="login-pass" placeholder="••••••••" />
+
+    <button class="login-btn" onclick="handleLogin()">Access Staff Brain</button>
+    <div class="login-error" id="login-error"></div>
+
+    <div class="login-footer">
+      Powered by <span>Josh AI Systems</span> · Staff use only
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ APP ═══════════════════════════ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <img class="topbar-logo" src="data:image/jpeg;base64,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" alt="logo" />
+      <div class="topbar-title">Staff Brain</div>
+      <div class="topbar-badge"><span class="status-dot"></span>Live</div>
+    </div>
+    <div class="topbar-right">
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar">JD</div>
+        <div class="user-name" id="user-display">Staff</div>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-heading">Sessions</div>
+        <button class="sidebar-btn active" onclick="newChat()">
+          <span class="icon">✦</span> New Session
+        </button>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="quick-topics">
+        <div class="sidebar-heading">Quick Topics</div>
+        <button class="topic-chip" onclick="sendTopic('Walk me through the full client consultation process from greeting to finish')">Client Consultation</button>
+        <button class="topic-chip" onclick="sendTopic('What are the signature Smokey Barbers cuts and how do I execute them?')">Signature Cuts</button>
+        <button class="topic-chip" onclick="sendTopic('Explain our hygiene and sanitation standards between clients')">Hygiene Standards</button>
+        <button class="topic-chip" onclick="sendTopic('What products do we use and recommend, and how do we upsell them?')">Products & Upsell</button>
+        <button class="topic-chip" onclick="sendTopic('How do I handle a difficult client or complaint professionally?')">Handling Complaints</button>
+        <button class="topic-chip" onclick="sendTopic('What is the correct pricing structure and how do I handle payments?')">Pricing & Payments</button>
+        <button class="topic-chip" onclick="sendTopic('Walk me through opening and closing procedures for the shop')">Open & Close</button>
+        <button class="topic-chip" onclick="sendTopic('How do I build a loyal client base and encourage rebooking?')">Client Retention</button>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-area">
+
+      <!-- WELCOME -->
+      <div id="welcome-state">
+        <img class="welcome-icon" src="data:image/jpeg;base64,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" alt="logo" />
+        <div class="welcome-title">Good to have you here.</div>
+        <div class="welcome-sub">Your Staff Brain knows everything about Smokey Barbers — ask it anything. Start with a topic below or type your own question.</div>
+        <div class="welcome-cards">
+          <div class="welcome-card" onclick="sendTopic('Walk me through the full client consultation process step by step')">
+            <div class="wc-icon">✂️</div>
+            <div class="wc-title">Client Consultation</div>
+            <div class="wc-desc">How to greet, assess and deliver every time</div>
+          </div>
+          <div class="welcome-card" onclick="sendTopic('What are the key Smokey Barbers techniques and signature styles I need to master?')">
+            <div class="wc-icon">⚡</div>
+            <div class="wc-title">Techniques & Styles</div>
+            <div class="wc-desc">Signature cuts, fades and finishing standards</div>
+          </div>
+          <div class="welcome-card" onclick="sendTopic('What do I need to know about shop culture, expectations and representing the Smokey brand?')">
+            <div class="wc-icon">🔥</div>
+            <div class="wc-title">Brand Standards</div>
+            <div class="wc-desc">Culture, expectations and the Smokey way</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      <div id="chat-messages"></div>
+
+      <!-- INPUT -->
+      <div class="input-bar">
+        <div class="input-wrap">
+          <textarea id="chat-input" placeholder="Ask anything about Smokey Barbers…" rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button id="send-btn" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+          </button>
+        </div>
+        <div class="input-hint">Staff Brain · Smokey Barbers · Powered by Josh AI Systems</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are the Smokey Barbers Staff Brain — the internal AI training companion for all staff across the Smokey Barbers chain. You have deep knowledge of everything a Smokey Barbers team member needs to know to deliver an exceptional experience, represent the brand correctly, and grow in their craft.
+
+Smokey Barbers is a premium barbershop chain with multiple locations across the country. The brand is bold, urban, and distinctive — represented by the gold gas mask logo. The culture is professional but real: high standards without pretension. Clients are loyal because the experience is consistently excellent.
+
+You are knowledgeable across all areas a barber or front-desk team member would need:
+
+**Craft & Technique**
+- Classic and modern cuts: fades, skin fades, tapers, scissor work, texture, layers
+- Beard work: shaping, lineups, hot towel shaves, beard maintenance advice
+- Consultation skills: reading the client's face shape, hair type, lifestyle, and matching the right style
+- Finishing: product application, styling, sending the client out looking sharp
+
+**Brand & Culture**
+- The Smokey Barbers identity: what we stand for, how we speak, how we present ourselves
+- The standard every client should experience from the moment they walk in to when they leave
+- How to represent the brand on and off the floor
+
+**Operations**
+- Opening and closing procedures
+- Hygiene and sanitation standards — tools, chairs, surfaces, between every client
+- Booking systems, appointment management, handling walk-ins
+- Pricing structure, payments, tipping etiquette
+
+**Client Experience**
+- How to greet clients, build rapport, remember details
+- Upselling products and services naturally and without pressure
+- Handling complaints, difficult clients, or service recovery
+- Building a loyal client base and encouraging rebooking
+
+**Products**
+- The product lines stocked at Smokey Barbers
+- When and how to recommend products to clients
+- How to demonstrate product use as part of the finish
+
+Respond in a tone that matches the brand: direct, knowledgeable, warm but professional. No fluff. Give practical, actionable answers. When explaining techniques, be specific. When explaining brand standards, be clear on what is and isn't acceptable.
+
+Where relevant, end your response with a **Follow-up** suggestion — one question the team member might want to ask next to go deeper.
+
+Always treat the team member as a capable professional who wants to grow. Never be condescending. Never guess — if something would need to be confirmed with a manager or the specific location's policy, say so clearly.`;
+
+// ── AUTH ──
+const DEMO_USERS = {
+  'jake.leeds': { pass: 'smoke123', name: 'Jake Leeds', initials: 'JL' },
+  'admin': { pass: 'admin', name: 'Staff Member', initials: 'SM' },
+  'demo': { pass: 'demo', name: 'Demo User', initials: 'DU' }
+};
+
+function handleLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+
+  if (DEMO_USERS[user] && DEMO_USERS[user].pass === pass) {
+    const u = DEMO_USERS[user];
+    document.getElementById('user-display').textContent = u.name;
+    document.getElementById('user-avatar').textContent = u.initials;
+    document.getElementById('login-screen').style.display = 'none';
+    const app = document.getElementById('app');
+    app.style.display = 'flex';
+    err.textContent = '';
+  } else {
+    err.textContent = 'Incorrect credentials. Try demo / demo to access.';
+  }
+}
+
+function handleLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  history = [];
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('chat-messages').style.display = 'none';
+  document.getElementById('welcome-state').style.display = 'flex';
+}
+
+// Allow Enter on login
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleLogin();
+});
+document.getElementById('login-user').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleLogin();
+});
+
+// ── CHAT ──
+let history = [];
+let isTyping = false;
+
+function newChat() {
+  history = [];
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('chat-messages').style.display = 'none';
+  document.getElementById('welcome-state').style.display = 'flex';
+}
+
+function showChat() {
+  document.getElementById('welcome-state').style.display = 'none';
+  const cm = document.getElementById('chat-messages');
+  cm.style.display = 'flex';
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function sendTopic(text) {
+  showChat();
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function appendMsg(role, text) {
+  showChat();
+  const cm = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg msg-${role}`;
+
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  meta.textContent = role === 'user' ? '— you' : '◈ staff brain';
+  div.appendChild(meta);
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (role === 'assistant') {
+    bubble.innerHTML = formatText(text);
+  } else {
+    bubble.textContent = text;
+  }
+  div.appendChild(bubble);
+  cm.appendChild(div);
+  cm.scrollTop = cm.scrollHeight;
+}
+
+function formatText(t) {
+  return t
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function showTyping() {
+  const cm = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'typing-wrap';
+  div.id = 'typing-indicator';
+  div.innerHTML = `
+    <div class="msg-meta" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:6px;">◈ staff brain</div>
+    <div class="typing-dots">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>`;
+  cm.appendChild(div);
+  cm.scrollTop = cm.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  if (isTyping) return;
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('send-btn');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  appendMsg('user', text);
+  history.push({ role: 'user', content: text });
+
+  isTyping = true;
+  btn.disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.find(b => b.type === 'text')?.text || 'Something went wrong. Please try again.';
+    history.push({ role: 'assistant', content: reply });
+    removeTyping();
+    appendMsg('assistant', reply);
+  } catch (e) {
+    removeTyping();
+    appendMsg('assistant', 'Connection issue. Please check your network and try again.');
+  }
+
+  isTyping = false;
+  btn.disabled = false;
+  input.focus();
+}
+</script>
+</body>
+</html>
