@@ -328,12 +328,17 @@ export default function ChatInterface({
   }
 
   const handleInputFocus = () => {
-    // Scroll input into center of view to stay above keyboard on mobile
+    // Scroll input higher to ensure full visibility above keyboard
     setTimeout(() => {
       inputRef.current?.scrollIntoView({
         behavior: 'smooth',
-        block: 'center'
+        block: 'start'
       })
+      // Additional scroll down a bit to position between top and center
+      setTimeout(() => {
+        const scrollAmount = window.innerHeight * 0.25
+        window.scrollBy(0, scrollAmount)
+      }, 100)
     }, 300)
   }
 
