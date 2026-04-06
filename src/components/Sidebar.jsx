@@ -22,8 +22,13 @@ const SAVED_GUIDES = [
   'Clean-Down Routine'
 ]
 
-export default function Sidebar({ onQuickTopicClick, isOpen, onClose }) {
+export default function Sidebar({ onQuickTopicClick, isOpen, onClose, onNewSession }) {
   const [selectedGuide, setSelectedGuide] = useState(null)
+
+  const handleNewSession = () => {
+    onNewSession()
+    onClose()
+  }
 
   return (
     <>
@@ -31,7 +36,7 @@ export default function Sidebar({ onQuickTopicClick, isOpen, onClose }) {
       <div className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-section">
           <h3 className="sidebar-heading">Sessions</h3>
-          <button className="sidebar-item">+ New Session</button>
+          <button className="sidebar-item" onClick={handleNewSession}>+ New Session</button>
         </div>
 
         <div className="sidebar-section">

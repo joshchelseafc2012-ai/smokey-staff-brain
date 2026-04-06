@@ -28,7 +28,7 @@ Every client gets the same structure. No exceptions.
 **Step 1 — Greet properly**
 - Eye contact
 - Firm tone
-- "Alright mate, what are we doing today?"
+- "Alright bro, what are we doing today?"
 
 **Step 2 — Clarify the goal**
 Ask:
@@ -112,7 +112,7 @@ If they kick off, stay calm. We don't argue — we explain.
 - Bookings always come first
 - Walk‑ins fill the gaps
 - If you're free, take them
-- If you're slammed, be honest: "We're stacked right now, mate — best to book in"
+- If you're slammed, be honest: "We're stacked right now, bro — best to book in"
 
 ## CUSTOMER EXPERIENCE STANDARDS
 Every client should feel:
@@ -316,6 +316,11 @@ export default function ChatInterface({
     }, 0)
   }
 
+  const handleNewSession = () => {
+    setMessages([])
+    setInput('')
+  }
+
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion)
   }
@@ -351,6 +356,7 @@ export default function ChatInterface({
           onQuickTopicClick={handleQuickTopic}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          onNewSession={handleNewSession}
         />
 
         <div className="chat-area">
