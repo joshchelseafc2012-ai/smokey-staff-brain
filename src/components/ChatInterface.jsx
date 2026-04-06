@@ -212,6 +212,10 @@ export default function ChatInterface({
     }
 
     try {
+      // Trim conversation history to last 5 messages for better performance
+      // User sees full history, but API only gets recent context
+      const recentHistory = messages.slice(-5)
+
       // Call backend proxy instead of direct API (avoids CORS issues)
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -220,7 +224,7 @@ export default function ChatInterface({
         },
         body: JSON.stringify({
           message: userMessage,
-          conversationHistory: messages,
+          conversationHistory: recentHistory,
           selectedShop: selectedShop,
           staffName: staffName
         })
