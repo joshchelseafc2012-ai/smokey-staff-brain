@@ -111,25 +111,25 @@
 
 @media (max-width: 768px) {
   .shop-selector-wrapper {
-    grid-row: 3;
-    grid-column: 2;
     position: relative;
-    justify-self: end;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .shop-selector-trigger {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 8px 16px;
+    font-size: 13px;
     white-space: nowrap;
   }
 
   .shop-dropdown {
     position: absolute;
     top: 100%;
-    right: 0;
-    left: auto;
-    transform: none;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     margin-top: 8px;
-    min-width: 180px;
+    min-width: 200px;
   }
 }
