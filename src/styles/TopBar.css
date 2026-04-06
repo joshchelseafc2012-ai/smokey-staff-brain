@@ -211,4 +211,18 @@
     font-size: 12px;
     white-space: normal;
   }
+
+  /* Dropdowns row - Guides and Shop side by side */
+  .topbar-dropdowns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .topbar-dropdowns .guide-selector-wrapper,
+  .topbar-dropdowns .shop-selector-wrapper {
+    flex: 0 1 auto;
+  }
 }

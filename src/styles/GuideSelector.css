@@ -1,8 +1,8 @@
-.shop-selector-wrapper {
+.guide-selector-wrapper {
   position: relative;
 }
 
-.shop-selector-trigger {
+.guide-selector-trigger {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -18,34 +18,33 @@
   white-space: nowrap;
 }
 
-.shop-selector-trigger:hover {
+.guide-selector-trigger:hover {
   background: var(--raised);
   border-color: var(--gold);
   color: var(--gold);
   box-shadow: 0 0 12px rgba(201, 168, 76, 0.15);
 }
 
-.shop-name {
-  min-width: 80px;
+.guide-label {
+  min-width: 50px;
   text-align: left;
 }
 
-.shop-icon {
+.guide-icon {
   font-size: 10px;
   opacity: 0.6;
   transition: transform 0.2s;
 }
 
-.shop-selector-trigger:hover .shop-icon {
+.guide-selector-trigger:hover .guide-icon {
   opacity: 1;
   color: var(--gold);
 }
 
-.shop-dropdown {
+.guide-dropdown {
   position: absolute;
   top: 100%;
-  left: 52%;
-  transform: translateX(-50%);
+  left: 0;
   margin-top: 8px;
   background: var(--panel);
   border: 1px solid var(--border);
@@ -67,24 +66,7 @@
   }
 }
 
-.shop-category {
-  border-bottom: 1px solid var(--border);
-}
-
-.shop-category:last-child {
-  border-bottom: none;
-}
-
-.category-label {
-  padding: 8px 16px 4px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-dim);
-  font-weight: 600;
-}
-
-.shop-option {
+.guide-option {
   display: block;
   width: 100%;
   padding: 12px 16px;
@@ -93,40 +75,34 @@
   color: var(--text);
   text-align: left;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.2s;
+  border-bottom: 1px solid var(--border);
 }
 
-.shop-option:hover {
+.guide-option:last-child {
+  border-bottom: none;
+}
+
+.guide-option:hover {
   background: var(--raised);
   color: var(--gold);
   padding-left: 20px;
 }
 
-.shop-option.active {
-  background: var(--gold-subtle);
-  color: var(--gold);
-  font-weight: 600;
-}
-
+/* Mobile layout */
 @media (max-width: 768px) {
-  .shop-selector-wrapper {
+  .guide-selector-wrapper {
     position: relative;
   }
 
-  .shop-selector-trigger {
+  .guide-selector-trigger {
     padding: 8px 12px;
     font-size: 12px;
-    white-space: nowrap;
   }
 
-  .shop-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    left: auto;
-    transform: none;
-    margin-top: 8px;
+  .guide-dropdown {
     min-width: 180px;
+    left: 0;
   }
 }
