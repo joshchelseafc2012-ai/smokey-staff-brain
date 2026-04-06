@@ -126,27 +126,61 @@
 
 @media (max-width: 768px) {
   .topbar {
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
     gap: 8px;
+    padding: 12px 16px;
     min-height: auto;
     border-bottom: 1px solid var(--border);
+    position: relative;
   }
 
-  /* Shop hours section - below topbar-left on mobile */
+  .topbar-left {
+    display: contents;
+  }
+
+  .menu-toggle {
+    display: block;
+    padding: 4px 8px;
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .logo-small {
+    width: 36px;
+    height: 36px;
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .logo-small:hover {
+    filter: drop-shadow(0 0 16px rgba(201, 168, 76, 0.4));
+  }
+
+  .branding {
+    gap: 2px;
+    grid-row: 2;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Shop hours section - next to burger on first row */
   .topbar-center {
-    flex: 100%;
+    grid-row: 1;
+    grid-column: 2;
+    flex: none;
     padding: 0;
     margin-bottom: 0;
   }
 
   .shop-info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 8px 0;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    padding: 0;
     background: none;
     border: none;
     text-align: left;
@@ -155,20 +189,13 @@
   .shop-address {
     font-size: 11px;
     margin-bottom: 0;
-    flex: 1;
+    flex: 0 0 auto;
   }
 
   .shop-hours {
     font-size: 12px;
     white-space: nowrap;
-  }
-
-  /* Main header section with menu, logo, title */
-  .topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
+    flex: 0 0 auto;
   }
 
   .topbar-title {
@@ -178,23 +205,5 @@
 
   .topbar-subtitle {
     font-size: 9px;
-  }
-
-  .logo-small {
-    width: 36px;
-    height: 36px;
-  }
-
-  .logo-small:hover {
-    filter: drop-shadow(0 0 16px rgba(201, 168, 76, 0.4));
-  }
-
-  .menu-toggle {
-    display: block;
-    padding: 4px 8px;
-  }
-
-  .branding {
-    gap: 2px;
   }
 }
