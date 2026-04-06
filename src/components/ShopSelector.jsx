@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { SHOP_INFO } from './TopBar'
 import '../styles/ShopSelector.css'
 
+// Build shops array from SHOP_INFO with categories
 const SHOPS = [
   { id: 'tolworth', name: 'Tolworth', category: 'Standalone' },
   { id: 'kingston', name: 'Kingston', category: 'Standalone' },
-  { id: 'kensington', name: 'Kensington', category: 'Standalone' },
+  { id: 'west', name: 'West', category: 'Standalone' },
   { id: 'birmingham', name: 'Birmingham (Primark)', category: 'Primark' },
   { id: 'manchester', name: 'Manchester (Primark)', category: 'Primark' },
 ]
