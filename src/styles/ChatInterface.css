@@ -100,19 +100,45 @@
 
   .input-bar {
     padding: 12px 16px;
+    box-sizing: border-box;
   }
 
   .input-wrapper {
     gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .message-input {
     padding: 10px 14px;
     font-size: 13px;
+    min-width: 0;
   }
 
   .send-btn {
     padding: 10px 18px;
     font-size: 12px;
+    flex-shrink: 0;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 375px) {
+  .input-bar {
+    padding: 10px 12px;
+  }
+
+  .input-wrapper {
+    gap: 6px;
+  }
+
+  .message-input {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .send-btn {
+    padding: 8px 14px;
+    font-size: 11px;
   }
 }

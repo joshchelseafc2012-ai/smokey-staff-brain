@@ -219,10 +219,47 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    flex-wrap: wrap;
   }
 
   .topbar-dropdowns .guide-selector-wrapper,
   .topbar-dropdowns .shop-selector-wrapper {
     flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  /* Extra small phones - stack dropdowns */
+  @media (max-width: 375px) {
+    .topbar {
+      padding: 12px;
+      gap: 10px;
+    }
+
+    .topbar-left {
+      gap: 8px;
+    }
+
+    .logo-small {
+      width: 50px;
+      height: 50px;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+    }
+
+    .topbar-subtitle {
+      font-size: 8px;
+    }
+
+    .topbar-dropdowns {
+      gap: 6px;
+    }
+
+    .guide-selector-trigger,
+    .shop-selector-trigger {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
   }
 }

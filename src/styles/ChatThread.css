@@ -37,8 +37,11 @@
   border-radius: 8px;
   line-height: 1.8;
   word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
   font-size: 16px;
+  min-width: 0;
 }
 
 .message-user .message-content {
@@ -88,7 +91,7 @@
   }
 }
 
-/* Mobile */
+/* Mobile - larger phones (iPhone 12+, Android) */
 @media (max-width: 768px) {
   .chat-thread {
     padding: 16px;
@@ -100,5 +103,35 @@
     padding: 10px 14px;
     font-size: 15px;
     line-height: 1.7;
+  }
+}
+
+/* Mobile - smaller phones (iPhone SE, small Android) */
+@media (max-width: 500px) {
+  .chat-thread {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .message-content {
+    max-width: 90%;
+    padding: 9px 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+/* Mobile - very small phones (iPhone SE, small screens) */
+@media (max-width: 375px) {
+  .chat-thread {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .message-content {
+    max-width: 92%;
+    padding: 8px 11px;
+    font-size: 13px;
+    line-height: 1.5;
   }
 }
