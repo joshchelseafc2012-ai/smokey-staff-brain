@@ -117,7 +117,8 @@
     top: 0;
     bottom: 0;
     z-index: 200;
-    max-height: 100vh;
+    height: 100vh;
+    max-height: none;
     transition: left 0.3s ease;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.6);
   }

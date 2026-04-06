@@ -134,19 +134,18 @@
     border-bottom: 1px solid var(--border);
   }
 
-  /* Shop hours at very top on mobile */
+  /* Shop hours section - below topbar-left on mobile */
   .topbar-center {
-    order: -1;
     flex: 100%;
     padding: 0;
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
 
   .shop-info {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     padding: 8px 0;
     background: none;
     border: none;
