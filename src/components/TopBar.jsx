@@ -84,7 +84,10 @@ export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
           ☰
         </button>
         <img src="/assets/smokey-logo.png" alt="Smokey" className="logo-small" />
-        <h1 className="topbar-title">SMOKEY STAFF BRAIN</h1>
+        <div className="branding">
+          <h1 className="topbar-title">SMOKEY STAFF BRAIN</h1>
+          <p className="topbar-subtitle">INTERNAL KNOWLEDGE SYSTEM</p>
+        </div>
       </div>
 
       <div className="topbar-center">
