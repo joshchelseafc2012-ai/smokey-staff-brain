@@ -81,9 +81,8 @@ export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
     <div className="topbar">
       <div className="topbar-left">
         <button className="menu-toggle" onClick={onMenuToggle} aria-label="Toggle menu">
-          ☰
+          <img src="/assets/smokey-logo.png" alt="Smokey" className="logo-small" />
         </button>
-        <img src="/assets/smokey-logo.png" alt="Smokey" className="logo-small" />
         <div className="branding">
           <h1 className="topbar-title">SMOKEY STAFF BRAIN</h1>
           <p className="topbar-subtitle">INTERNAL KNOWLEDGE SYSTEM</p>
