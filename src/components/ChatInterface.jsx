@@ -197,6 +197,7 @@ export default function ChatInterface({
   const [isLoading, setIsLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const inputRef = useRef(null)
+  const chatAreaRef = useRef(null)
 
   const handleSendMessage = async (messageText) => {
     const textToSend = messageText || input.trim()
@@ -319,6 +320,11 @@ export default function ChatInterface({
   const handleNewSession = () => {
     setMessages([])
     setInput('')
+    setIsLoading(false)
+    // Scroll chat area to top
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = 0
+    }
   }
 
   const handleSuggestionClick = (suggestion) => {
@@ -359,7 +365,7 @@ export default function ChatInterface({
           onNewSession={handleNewSession}
         />
 
-        <div className="chat-area">
+        <div className="chat-area" ref={chatAreaRef}>
           {messages.length === 0 && <WelcomeMessage staffName={staffName} />}
           <ChatThread messages={messages} isLoading={isLoading} />
 
