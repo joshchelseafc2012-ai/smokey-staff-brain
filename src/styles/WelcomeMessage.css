@@ -1,6 +1,6 @@
 .welcome-message {
   text-align: center;
-  padding: 40px 24px 32px;
+  padding: 80px 24px 32px;
   margin-bottom: 24px;
   animation: fadeIn 0.6s ease;
   border-bottom: 2px solid rgba(201, 168, 76, 0.2);
@@ -28,7 +28,7 @@
 
 @media (max-width: 768px) {
   .welcome-message {
-    padding: 28px 16px 20px;
+    padding: 70px 16px 20px;
     margin-bottom: 16px;
   }
 
