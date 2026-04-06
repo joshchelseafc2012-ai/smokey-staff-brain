@@ -111,10 +111,10 @@
 
 @media (max-width: 768px) {
   .shop-selector-wrapper {
-    position: absolute;
-    bottom: 12px;
-    right: 16px;
-    z-index: 101;
+    grid-row: 3;
+    grid-column: 2;
+    position: relative;
+    justify-self: end;
   }
 
   .shop-selector-trigger {
@@ -124,9 +124,12 @@
   }
 
   .shop-dropdown {
+    position: absolute;
+    top: 100%;
     right: 0;
     left: auto;
     transform: none;
+    margin-top: 8px;
     min-width: 180px;
   }
 }
