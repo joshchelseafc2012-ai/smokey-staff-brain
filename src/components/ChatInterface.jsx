@@ -264,9 +264,19 @@ export default function ChatInterface({
     }
   }
 
+  const handleInputFocus = () => {
+    // Scroll input into view below TopBar
+    setTimeout(() => {
+      inputRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      })
+    }, 0)
+  }
+
   return (
     <div className="chat-layout">
-      <TopBar selectedShop={selectedShop} onShopChange={onShopChange} />
+      <TopBar selectedShop={selectedShop} onShopChange={onShopChange} onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="main-container">
         <Sidebar
@@ -294,6 +304,7 @@ export default function ChatInterface({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
+                onFocus={handleInputFocus}
                 placeholder="Ask anything about Smokey standards…"
                 className="message-input"
                 disabled={isLoading}

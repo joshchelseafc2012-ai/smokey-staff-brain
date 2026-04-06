@@ -44,7 +44,8 @@
 .shop-dropdown {
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 52%;
+  transform: translateX(-50%);
   margin-top: 8px;
   background: var(--panel);
   border: 1px solid var(--border);
@@ -115,7 +116,6 @@
   }
 
   .shop-dropdown {
-    right: 0;
     min-width: 180px;
   }
 }

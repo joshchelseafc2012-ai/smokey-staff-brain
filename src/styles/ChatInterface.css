@@ -16,13 +16,15 @@
   flex-direction: column;
   flex: 1;
   background: var(--void);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .input-bar {
   padding: 16px 24px;
   background: var(--surface);
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .input-wrapper {
@@ -43,6 +45,11 @@
   resize: none;
   max-height: 120px;
   transition: all 0.2s;
+}
+
+.message-input::placeholder {
+  color: var(--gold-dim);
+  opacity: 0.8;
 }
 
 .message-input:focus {
