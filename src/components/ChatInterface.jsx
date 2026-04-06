@@ -328,13 +328,13 @@ export default function ChatInterface({
   }
 
   const handleInputFocus = () => {
-    // Scroll input into view well below TopBar to prevent banner overlap
+    // Scroll input into center of view to stay above keyboard on mobile
     setTimeout(() => {
       inputRef.current?.scrollIntoView({
         behavior: 'smooth',
-        block: 'end'
+        block: 'center'
       })
-    }, 100)
+    }, 300)
   }
 
   return (
