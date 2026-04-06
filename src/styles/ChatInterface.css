@@ -111,7 +111,7 @@
 
   .message-input {
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 16px;
     min-width: 0;
   }
 
@@ -134,7 +134,7 @@
 
   .message-input {
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .send-btn {
