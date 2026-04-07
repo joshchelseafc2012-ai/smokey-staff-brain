@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getQuickTopics } from '../services/brainService'
+import { getQuickTopics } from '../config/brainConfig'
 import GuideModal from './GuideModal'
 import '../styles/Sidebar.css'
 

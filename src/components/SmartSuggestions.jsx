@@ -1,4 +1,4 @@
-import { getSuggestions } from '../services/brainService';
+import { getSuggestions } from '../config/brainConfig';
 import '../styles/SmartSuggestions.css';
 
 /**
