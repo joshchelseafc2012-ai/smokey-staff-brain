@@ -268,9 +268,9 @@ export default function ClientBrain({
                     </div>
                     <p className="progress-hint">
                       {clientData.loyaltyTier === 'gold'
-                        ? 'You're a VIP! Enjoy premium benefits.'
+                        ? `You're a VIP! Enjoy premium benefits.`
                         : clientData.loyaltyTier === 'silver'
-                        ? 'Keep going to reach Gold tier!'
+                        ? `Keep going to reach Gold tier!`
                         : 'Build points with every visit'}
                     </p>
                   </div>
