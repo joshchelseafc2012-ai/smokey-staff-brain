@@ -95,3 +95,10 @@ export function getBrainSettings(brainType) {
     maxTokens: config.maxTokens
   };
 }
+
+export function getSystemPrompt(brainType) {
+  const config = getBrainConfig(brainType);
+  // System prompts are handled by backend, but this function
+  // provides access to brain config metadata for frontend
+  return config;
+}
