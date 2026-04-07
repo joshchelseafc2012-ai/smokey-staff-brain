@@ -3,19 +3,7 @@
  * Helper functions and utilities for working with brain configurations
  */
 
-import { getBrainConfig, getSystemPrompt } from '../config/brainConfig';
-import { getShopInfo } from '../config/shopData';
-
-/**
- * Get complete system prompt with shop context
- * Used by frontend and backend to construct the final prompt for Claude
- */
-export function buildSystemPrompt(brainType, shopId) {
-  const systemPrompt = getSystemPrompt(brainType);
-  const shopInfo = getShopInfo(shopId);
-
-  return `${systemPrompt}\n\nYou're currently supporting the ${shopInfo.name} location (${shopInfo.address}).`;
-}
+import { getBrainConfig } from '../config/brainConfig';
 
 /**
  * Get brain metadata for UI display
@@ -65,7 +53,6 @@ export function canUserAccessBrain(userRole, brainType) {
 }
 
 export default {
-  buildSystemPrompt,
   getBrainMetadata,
   isValidBrainType,
   getDefaultBrainForRole,

@@ -5,7 +5,6 @@ import ChatThread from '../components/shared/ChatThread'
 import SmartSuggestions from '../components/SmartSuggestions'
 import WelcomeMessage from '../components/shared/WelcomeMessage'
 import Footer from '../components/shared/Footer'
-import { buildSystemPrompt } from '../services/brainService'
 import '../styles/ChatInterface.css'
 
 const FALLBACK_MESSAGE = `No stress — looks like the Brain can't reach the server right now. Here's the standard Smokey guide while we're offline:
