@@ -158,3 +158,41 @@
     max-width: 100px;
   }
 }
+
+.demo-credentials {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.demo-title {
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 11px;
+}
+
+.demo-credentials ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.demo-credentials li {
+  color: var(--text-dim);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.demo-credentials strong {
+  color: var(--text);
+  font-weight: 600;
+}

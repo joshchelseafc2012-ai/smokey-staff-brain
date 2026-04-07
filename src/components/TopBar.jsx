@@ -53,6 +53,22 @@ const SHOP_INFO = {
   }
 }
 
+// Brain metadata for titles and subtitles
+const BRAIN_INFO = {
+  staff: {
+    title: 'SMOKEY STAFF BRAIN',
+    subtitle: 'INTERNAL KNOWLEDGE SYSTEM'
+  },
+  owner: {
+    title: 'SMOKEY OWNER BRAIN',
+    subtitle: 'BUSINESS INTELLIGENCE'
+  },
+  client: {
+    title: 'SMOKEY CLIENT BRAIN',
+    subtitle: 'YOUR PERSONAL ASSISTANT'
+  }
+}
+
 // Helper function to get today's opening hours
 function getTodaysHours(shopId) {
   const shop = SHOP_INFO[shopId]
@@ -73,10 +89,18 @@ function getTodaysHours(shopId) {
   }
 }
 
-export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
+export default function TopBar({
+  brainType,
+  selectedShop,
+  onShopChange,
+  onMenuToggle,
+  user,
+  onLogout
+}) {
   const shop = SHOP_INFO[selectedShop] || SHOP_INFO.tolworth
   const todaysHours = getTodaysHours(selectedShop)
   const isOpen = todaysHours !== 'Closed'
+  const brainInfo = BRAIN_INFO[brainType] || BRAIN_INFO.staff
 
   return (
     <div className="topbar">
@@ -85,8 +109,8 @@ export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
           <img src="/assets/smokey-logo.png" alt="Smokey" className="logo-small" />
         </button>
         <div className="branding">
-          <h1 className="topbar-title">SMOKEY STAFF BRAIN</h1>
-          <p className="topbar-subtitle">INTERNAL KNOWLEDGE SYSTEM</p>
+          <h1 className="topbar-title">{brainInfo.title}</h1>
+          <p className="topbar-subtitle">{brainInfo.subtitle}</p>
         </div>
       </div>
 
@@ -99,9 +123,20 @@ export default function TopBar({ selectedShop, onShopChange, onMenuToggle }) {
         </div>
       </div>
 
-      <div className="topbar-dropdowns">
-        <GuideSelector />
-        <ShopSelector selectedShop={selectedShop} onShopChange={onShopChange} />
+      <div className="topbar-right">
+        <div className="topbar-dropdowns">
+          {brainType === 'staff' && <GuideSelector />}
+          <ShopSelector selectedShop={selectedShop} onShopChange={onShopChange} />
+        </div>
+
+        {user && (
+          <div className="topbar-user">
+            <span className="user-name">{user.name}</span>
+            <button className="logout-btn" onClick={onLogout} aria-label="Logout">
+              Exit
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

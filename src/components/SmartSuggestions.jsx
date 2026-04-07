@@ -1,19 +1,19 @@
-import '../styles/SmartSuggestions.css'
+import { getSuggestions } from '../services/brainService';
+import '../styles/SmartSuggestions.css';
 
-const SUGGESTIONS = [
-  'Show me the Smokey skin fade process',
-  'What\'s the clean‑down routine',
-  'How do we handle late clients',
-  'Walk me through the opening checklist',
-  'Give me the consultation script'
-]
+/**
+ * SmartSuggestions - Brain-aware suggestion chips
+ * Shows different suggestions based on brain type
+ */
+export default function SmartSuggestions({ onSuggestionClick, show, brainType }) {
+  if (!show) return null;
 
-export default function SmartSuggestions({ onSuggestionClick, show }) {
-  if (!show || !SUGGESTIONS.length) return null
+  const suggestions = getSuggestions(brainType || 'staff');
+  if (!suggestions || !suggestions.length) return null;
 
   return (
     <div className="smart-suggestions">
-      {SUGGESTIONS.map((suggestion, idx) => (
+      {suggestions.map((suggestion, idx) => (
         <button
           key={idx}
           className="suggestion-chip"
@@ -23,5 +23,5 @@ export default function SmartSuggestions({ onSuggestionClick, show }) {
         </button>
       ))}
     </div>
-  )
+  );
 }

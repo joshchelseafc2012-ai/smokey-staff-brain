@@ -26,6 +26,53 @@
   padding: 0 32px;
 }
 
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.topbar-dropdowns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(201, 168, 76, 0.3);
+}
+
+.user-name {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: none;
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  color: var(--gold);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: var(--gold);
+  color: var(--text-bright);
+}
+
 .shop-info {
   text-align: center;
   background: rgba(201, 168, 76, 0.05);
@@ -142,6 +189,18 @@
     width: 100%;
   }
 
+  .topbar-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .topbar-user {
+    padding-left: 12px;
+    border-left: 1px solid rgba(201, 168, 76, 0.3);
+    flex: 0 1 auto;
+  }
+
   .menu-toggle {
     display: block;
     padding: 4px 8px;
@@ -218,7 +277,6 @@
     gap: 8px;
     justify-content: center;
     align-items: center;
-    width: 100%;
     flex-wrap: wrap;
   }
 
@@ -259,6 +317,20 @@
     .guide-selector-trigger,
     .shop-selector-trigger {
       padding: 6px 10px;
+      font-size: 11px;
+    }
+
+    .topbar-user {
+      padding-left: 8px;
+      gap: 8px;
+    }
+
+    .user-name {
+      font-size: 12px;
+    }
+
+    .logout-btn {
+      padding: 4px 8px;
       font-size: 11px;
     }
   }

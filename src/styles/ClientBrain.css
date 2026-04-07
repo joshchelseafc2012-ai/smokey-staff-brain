@@ -1,0 +1,295 @@
+/* Client Brain Styles */
+
+.client-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--bg-card, #fff);
+  border-radius: 0.75rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.profile-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+}
+
+/* Loyalty Card */
+.loyalty-card {
+  background: linear-gradient(135deg, #C9A84C 0%, #B89040 100%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loyalty-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(201, 168, 76, 0.3);
+}
+
+.loyalty-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.loyalty-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.loyalty-tier {
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+.loyalty-tier.gold {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+}
+
+.loyalty-tier.silver {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.loyalty-tier.standard {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.loyalty-points {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.points-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.points-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'SF Mono', Monaco, monospace;
+  line-height: 1;
+}
+
+.points-label {
+  font-size: 0.85rem;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.375rem;
+}
+
+.points-progress {
+  flex: 1;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  backdrop-filter: blur(10px);
+}
+
+.progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progress-hint {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Upcoming Bookings */
+.upcoming-section {
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  padding-top: 1.5rem;
+}
+
+.upcoming-section h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.booking-preview {
+  background: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+  border-left: 3px solid #C9A84C;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.booking-preview:hover {
+  background: linear-gradient(135deg, #efefef 0%, #f3f3f3 100%);
+}
+
+.booking-time {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+  margin-bottom: 0.5rem;
+}
+
+.booking-service {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #666);
+  margin-bottom: 0.375rem;
+}
+
+.booking-duration {
+  font-size: 0.85rem;
+  color: var(--text-tertiary, #999);
+  font-style: italic;
+}
+
+/* Quick Stats */
+.quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-secondary, #f9f9f9);
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.stat:hover {
+  background: var(--bg-tertiary, #f0f0f0);
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #C9A84C;
+  font-family: 'SF Mono', Monaco, monospace;
+  line-height: 1;
+  margin-bottom: 0.375rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .client-profile {
+    background: var(--bg-card, #1a1a1a);
+    border-color: var(--border-color, #333);
+  }
+
+  .loyalty-card {
+    background: linear-gradient(135deg, #B89040 0%, #9d7535 100%);
+    box-shadow: 0 8px 24px rgba(184, 144, 64, 0.3);
+  }
+
+  .loyalty-card:hover {
+    box-shadow: 0 12px 32px rgba(184, 144, 64, 0.4);
+  }
+
+  .booking-preview {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+  }
+
+  .booking-preview:hover {
+    background: linear-gradient(135deg, #353535 0%, #3d3d3d 100%);
+  }
+
+  .stat {
+    background: var(--bg-secondary, #2a2a2a);
+  }
+
+  .stat:hover {
+    background: var(--bg-tertiary, #333);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .client-profile {
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+
+  .loyalty-card {
+    padding: 1.25rem;
+  }
+
+  .loyalty-header {
+    margin-bottom: 1rem;
+  }
+
+  .loyalty-points {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .points-number {
+    font-size: 2rem;
+  }
+
+  .booking-preview {
+    padding: 0.875rem;
+  }
+
+  .quick-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 1rem;
+  }
+
+  .stat {
+    padding: 0.875rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+}

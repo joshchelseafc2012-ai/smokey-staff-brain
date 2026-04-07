@@ -364,7 +364,6 @@ export default function ChatInterface({
 
       <div className="main-container">
         <Sidebar
-          brainType={brainType}
           onQuickTopicClick={handleQuickTopic}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
@@ -379,7 +378,6 @@ export default function ChatInterface({
 
           {messages.length > 0 && !isLoading && (
             <SmartSuggestions
-              brainType={brainType}
               onSuggestionClick={handleSuggestionClick}
               show={messages.length > 0}
             />

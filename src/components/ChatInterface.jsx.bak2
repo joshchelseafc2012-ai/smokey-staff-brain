@@ -364,7 +364,6 @@ export default function ChatInterface({
 
       <div className="main-container">
         <Sidebar
-          brainType={brainType}
           onQuickTopicClick={handleQuickTopic}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}

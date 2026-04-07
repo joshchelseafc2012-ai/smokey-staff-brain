@@ -1,10 +1,29 @@
-// Simple authentication function
-// In production, use Netlify Identity instead
+// Authentication function with role support
+// Supports: staff, owner, client roles
+// In production, use Netlify Identity or a real auth service
 
 const DEMO_CREDENTIALS = [
-  { email: "demo@smokey.com", password: "demo123", name: "Demo User" },
-  { email: "manager@smokey.com", password: "manager123", name: "Manager" },
-  { email: "barber@smokey.com", password: "barber123", name: "Barber Staff" },
+  {
+    email: "staff@smokey.com",
+    password: "staff123",
+    name: "Jay",
+    role: "staff",
+    allowedBrains: ["staff"]
+  },
+  {
+    email: "owner@smokey.com",
+    password: "owner123",
+    name: "Owner",
+    role: "owner",
+    allowedBrains: ["staff", "owner"]
+  },
+  {
+    email: "client@smokey.com",
+    password: "client123",
+    name: "Client",
+    role: "client",
+    allowedBrains: ["client"]
+  }
 ];
 
 export default async (req, context) => {
@@ -23,7 +42,7 @@ export default async (req, context) => {
       );
     }
 
-    // Find matching credentials (demo only - use Netlify Identity in production)
+    // Find matching credentials (demo only - use real auth in production)
     const user = DEMO_CREDENTIALS.find(
       (u) => u.email === email && u.password === password
     );
@@ -35,14 +54,16 @@ export default async (req, context) => {
       );
     }
 
-    // Return user info
+    // Return user info with role and allowedBrains
     return new Response(
       JSON.stringify({
         user: {
           email: user.email,
           name: user.name,
-          id: user.email, // Simple ID for now
-        },
+          id: user.email,
+          role: user.role,
+          allowedBrains: user.allowedBrains
+        }
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );

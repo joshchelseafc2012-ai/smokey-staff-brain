@@ -1,11 +1,29 @@
 import { useState } from 'react'
 import '../styles/LoginScreen.css'
 
-// Demo credentials - local check only, no API call
+// Demo credentials with role support
 const DEMO_USERS = [
-  { email: 'demo@smokey.com', password: 'demo123', name: 'Demo Staff' },
-  { email: 'manager@smokey.com', password: 'manager123', name: 'Manager' },
-  { email: 'barber@smokey.com', password: 'barber123', name: 'Barber' },
+  {
+    email: 'staff@smokey.com',
+    password: 'staff123',
+    name: 'Jay',
+    role: 'staff',
+    allowedBrains: ['staff']
+  },
+  {
+    email: 'owner@smokey.com',
+    password: 'owner123',
+    name: 'Owner',
+    role: 'owner',
+    allowedBrains: ['staff', 'owner']
+  },
+  {
+    email: 'client@smokey.com',
+    password: 'client123',
+    name: 'Client',
+    role: 'client',
+    allowedBrains: ['client']
+  }
 ]
 
 export default function LoginScreen({ onLogin }) {
@@ -25,14 +43,17 @@ export default function LoginScreen({ onLogin }) {
       const user = DEMO_USERS.find(u => u.email === email && u.password === password)
 
       if (user) {
-        // Store staff name locally
+        // Store user data locally
         localStorage.setItem('staffName', user.name)
+        localStorage.setItem('userRole', user.role)
 
-        // Call parent onLogin handler
+        // Call parent onLogin handler with full user object (including role)
         onLogin({
           email: user.email,
           name: user.name,
-          id: user.email
+          id: user.email,
+          role: user.role,
+          allowedBrains: user.allowedBrains
         })
       } else {
         setError('Invalid email or password')
@@ -47,8 +68,8 @@ export default function LoginScreen({ onLogin }) {
       <div className="login-card">
         <div className="logo-wrap">
           <img src="/assets/smokey-logo.png" alt="Smokey Barbers Logo" className="logo-placeholder" />
-          <h1 className="brand-name">SMOKEY STAFF BRAIN</h1>
-          <p className="brand-sub">Internal Access Only</p>
+          <h1 className="brand-name">SMOKEY BRAINS</h1>
+          <p className="brand-sub">AI Operating System</p>
         </div>
 
         <form onSubmit={handleLogin} className="login-form">
@@ -84,6 +105,15 @@ export default function LoginScreen({ onLogin }) {
             {isLoading ? 'Entering...' : 'Enter the Brain'}
           </button>
         </form>
+
+        <div className="demo-credentials">
+          <p className="demo-title">Demo Credentials</p>
+          <ul>
+            <li><strong>Staff:</strong> staff@smokey.com / staff123</li>
+            <li><strong>Owner:</strong> owner@smokey.com / owner123</li>
+            <li><strong>Client:</strong> client@smokey.com / client123</li>
+          </ul>
+        </div>
 
         <p className="footer-text">
           Powered by Josh AI Systems

@@ -13,4 +13,4 @@
   port = 8888
 
 [context.dev.environment]
-  ANTHROPIC_API_KEY = "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"
+  ANTHROPIC_API_KEY = ""

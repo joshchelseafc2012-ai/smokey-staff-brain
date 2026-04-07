@@ -1,25 +1,28 @@
 import { useState } from 'react'
-import ChatInterface from './components/ChatInterface'
 import LoginScreen from './components/LoginScreen'
+import StaffBrain from './brains/StaffBrain'
+import OwnerBrain from './brains/OwnerBrain'
+import ClientBrain from './brains/ClientBrain'
 import './styles/App.css'
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState(null)
   const [selectedShop, setSelectedShop] = useState('tolworth')
-  const [staffName, setStaffName] = useState('')
   const [sessionMemory, setSessionMemory] = useState({
     staffName: '',
+    userRole: '',
     selectedShop: 'tolworth',
     lastQuestions: []
   })
 
   const handleLogin = (userData) => {
     setUser(userData)
-    setStaffName(userData.name || userData.email)
     setSessionMemory(prev => ({
       ...prev,
-      staffName: userData.name || userData.email
+      staffName: userData.name,
+      userRole: userData.role,
+      selectedShop: 'tolworth'
     }))
     setIsLoggedIn(true)
   }
@@ -27,10 +30,10 @@ export default function App() {
   const handleLogout = () => {
     setIsLoggedIn(false)
     setUser(null)
-    setStaffName('')
     setSelectedShop('tolworth')
     setSessionMemory({
       staffName: '',
+      userRole: '',
       selectedShop: 'tolworth',
       lastQuestions: []
     })
@@ -51,19 +54,58 @@ export default function App() {
     }))
   }
 
+  // Determine which brain to show based on user role
+  const getActiveBrain = () => {
+    if (!user) return null
+    return user.role === 'owner' ? 'owner'
+         : user.role === 'client' ? 'client'
+         : 'staff'
+  }
+
+  const activeBrain = getActiveBrain()
+
+  const renderBrain = () => {
+    switch (activeBrain) {
+      case 'owner':
+        return (
+          <OwnerBrain
+            user={user}
+            onLogout={handleLogout}
+            selectedShop={selectedShop}
+            onShopChange={handleShopChange}
+            onQuestionAsked={updateLastQuestions}
+          />
+        )
+      case 'client':
+        return (
+          <ClientBrain
+            user={user}
+            onLogout={handleLogout}
+            selectedShop={selectedShop}
+            onShopChange={handleShopChange}
+            onQuestionAsked={updateLastQuestions}
+          />
+        )
+      case 'staff':
+      default:
+        return (
+          <StaffBrain
+            user={user}
+            onLogout={handleLogout}
+            selectedShop={selectedShop}
+            onShopChange={handleShopChange}
+            onQuestionAsked={updateLastQuestions}
+          />
+        )
+    }
+  }
+
   return (
     <div id="app">
       {!isLoggedIn ? (
         <LoginScreen onLogin={handleLogin} />
       ) : (
-        <ChatInterface
-          user={user}
-          onLogout={handleLogout}
-          selectedShop={selectedShop}
-          onShopChange={handleShopChange}
-          staffName={staffName}
-          onQuestionAsked={updateLastQuestions}
-        />
+        renderBrain()
       )}
     </div>
   )
