@@ -1,0 +1,280 @@
+/* STAFF DASHBOARD */
+.staff-dashboard {
+  background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.04) 100%);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.staff-dashboard.loading {
+  color: var(--text-secondary, #666);
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.staff-dashboard .dashboard-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+  padding-bottom: 12px;
+}
+
+.staff-dashboard h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+}
+
+.staff-dashboard .next-appointment {
+  background: linear-gradient(135deg, rgba(201,168,76,0.15) 0%, rgba(201,168,76,0.08) 100%);
+  border: 2px solid rgba(201,168,76,0.3);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.staff-dashboard .next-appointment.highlight {
+  box-shadow: 0 4px 12px rgba(201,168,76,0.15);
+}
+
+.staff-dashboard .appointment-time {
+  font-size: 24px;
+  font-weight: 700;
+  color: #C9A84C;
+  margin-bottom: 8px;
+}
+
+.staff-dashboard .appointment-client {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+  margin-bottom: 6px;
+}
+
+.staff-dashboard .appointment-service {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin-bottom: 8px;
+}
+
+.staff-dashboard .appointment-duration {
+  font-size: 13px;
+  color: var(--text-secondary, #666);
+  font-weight: 500;
+}
+
+.staff-dashboard .upcoming-list {
+  background: rgba(201,168,76,0.05);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.staff-dashboard .list-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.staff-dashboard .compact-booking {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  font-size: 13px;
+}
+
+.staff-dashboard .compact-booking:last-child {
+  border-bottom: none;
+}
+
+.staff-dashboard .compact-booking .time {
+  font-weight: 600;
+  color: #C9A84C;
+  min-width: 50px;
+}
+
+.staff-dashboard .compact-booking .client {
+  color: var(--text-primary, #000);
+  flex: 1;
+  margin-left: 12px;
+}
+
+.staff-dashboard .no-bookings {
+  text-align: center;
+  color: var(--text-secondary, #666);
+  padding: 24px;
+  font-style: italic;
+}
+
+/* CLIENT BOOKING PANEL */
+.client-booking-panel {
+  background: linear-gradient(135deg, rgba(74,144,226,0.08) 0%, rgba(74,144,226,0.04) 100%);
+  border: 1px solid rgba(74,144,226,0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.client-booking-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(74,144,226,0.15);
+  padding-bottom: 12px;
+}
+
+.client-booking-panel h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #000);
+}
+
+.client-booking-panel .toggle-btn {
+  background: rgba(74,144,226,0.1);
+  border: 1px solid rgba(74,144,226,0.3);
+  color: #4A90E2;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.client-booking-panel .toggle-btn:hover {
+  background: rgba(74,144,226,0.15);
+  border-color: rgba(74,144,226,0.5);
+}
+
+.client-booking-panel .toggle-btn.active {
+  background: rgba(74,144,226,0.2);
+  border-color: #4A90E2;
+}
+
+.client-booking-panel .booking-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.client-booking-panel .booking-message {
+  background: rgba(74,144,226,0.1);
+  border: 1px solid rgba(74,144,226,0.3);
+  color: #4A90E2;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.client-booking-panel .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-booking-panel .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.client-booking-panel label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.client-booking-panel select,
+.client-booking-panel input {
+  background: var(--input-bg, #fff);
+  border: 1px solid rgba(74,144,226,0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-primary, #000);
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.client-booking-panel select:hover,
+.client-booking-panel input:hover {
+  border-color: rgba(74,144,226,0.3);
+}
+
+.client-booking-panel select:focus,
+.client-booking-panel input:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+}
+
+.client-booking-panel .btn-book {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.client-booking-panel .btn-book:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74,144,226,0.25);
+}
+
+.client-booking-panel .btn-book:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+  .staff-dashboard {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.05) 100%);
+    border-color: rgba(201,168,76,0.25);
+  }
+
+  .client-booking-panel {
+    background: linear-gradient(135deg, rgba(74,144,226,0.1) 0%, rgba(74,144,226,0.05) 100%);
+    border-color: rgba(74,144,226,0.25);
+  }
+
+  .client-booking-panel select,
+  .client-booking-panel input {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(74,144,226,0.3);
+    color: #fff;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .client-booking-panel .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-dashboard .next-appointment {
+    padding: 14px;
+  }
+
+  .staff-dashboard .appointment-time {
+    font-size: 20px;
+  }
+}

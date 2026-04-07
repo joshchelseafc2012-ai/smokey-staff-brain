@@ -4,8 +4,10 @@ import Sidebar from '../components/Sidebar'
 import ChatThread from '../components/shared/ChatThread'
 import SmartSuggestions from '../components/SmartSuggestions'
 import WelcomeMessage from '../components/shared/WelcomeMessage'
+import StaffDashboard from '../components/square/StaffDashboard'
 import Footer from '../components/shared/Footer'
 import '../styles/ChatInterface.css'
+import '../components/square/styles/BrainDashboards.css'
 
 const FALLBACK_MESSAGE = `No stress — looks like the Brain can't reach the server right now. Here's the standard Smokey guide while we're offline:
 
@@ -200,6 +202,8 @@ export default function StaffBrain({
       />
 
       <div className="chat-area" ref={chatAreaRef}>
+        <StaffDashboard selectedShop={selectedShop} staffName={user.name} />
+
         {messages.length === 0 && (
           <WelcomeMessage userName={user.name} brainType={brainType} />
         )}

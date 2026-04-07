@@ -4,9 +4,11 @@ import Sidebar from '../components/Sidebar'
 import ChatThread from '../components/shared/ChatThread'
 import SmartSuggestions from '../components/SmartSuggestions'
 import WelcomeMessage from '../components/shared/WelcomeMessage'
+import ClientBookingPanel from '../components/square/ClientBookingPanel'
 import { getCustomerLoyalty, getBookings } from '../services/squareService'
 import '../styles/ChatInterface.css'
 import '../styles/ClientBrain.css'
+import '../components/square/styles/BrainDashboards.css'
 
 const FALLBACK_MESSAGE = `No stress — looks like I can't reach the server. Try again in a moment.`
 
@@ -38,35 +40,33 @@ export default function ClientBrain({
   const inputRef = useRef(null);
   const chatAreaRef = useRef(null);
 
-  // Load client profile data on mount and when shop changes
+  const loadProfile = async () => {
+    setProfileLoading(true);
+    try {
+      const [loyalty, bookings] = await Promise.all([
+        getCustomerLoyalty(user.id || 'client'),
+        getBookings(selectedShop, 'upcoming')
+      ]);
+
+      let tier = 'standard';
+      if (loyalty.pointsBalance >= 1000) tier = 'gold';
+      if (loyalty.pointsBalance >= 500) tier = 'silver';
+
+      setClientData({
+        loyaltyPoints: loyalty.pointsBalance,
+        loyaltyTier: tier,
+        upcomingBookings: bookings.filter(b => b.status === 'confirmed'),
+        previousVisits: 15,
+        favoriteStaff: 'Jay'
+      });
+    } catch (error) {
+      console.error('Error loading client profile:', error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadProfile = async () => {
-      setProfileLoading(true);
-      try {
-        const [loyalty, bookings] = await Promise.all([
-          getCustomerLoyalty(user.id || 'client'),
-          getBookings(selectedShop, 'upcoming')
-        ]);
-
-        // Determine loyalty tier based on points
-        let tier = 'standard';
-        if (loyalty.pointsBalance >= 1000) tier = 'gold';
-        if (loyalty.pointsBalance >= 500) tier = 'silver';
-
-        setClientData({
-          loyaltyPoints: loyalty.pointsBalance,
-          loyaltyTier: tier,
-          upcomingBookings: bookings.filter(b => b.status === 'confirmed'),
-          previousVisits: 15, // Would come from customer data in real implementation
-          favoriteStaff: 'Jay'
-        });
-      } catch (error) {
-        console.error('Error loading client profile:', error);
-      } finally {
-        setProfileLoading(false);
-      }
-    };
-
     loadProfile();
   }, [selectedShop, user.id]);
 
@@ -212,14 +212,6 @@ export default function ClientBrain({
     }, 300);
   };
 
-  const getTierColor = (tier) => {
-    switch (tier) {
-      case 'gold': return '#FFD700';
-      case 'silver': return '#C0C0C0';
-      default: return '#A9A9A9';
-    }
-  };
-
   return (
     <BrainLayout
       brainType={brainType}
@@ -276,6 +268,8 @@ export default function ClientBrain({
                   </div>
                 </div>
               </div>
+
+              <ClientBookingPanel selectedShop={selectedShop} onBookingCreated={loadProfile} />
 
               {clientData.upcomingBookings.length > 0 && (
                 <div className="upcoming-section">
