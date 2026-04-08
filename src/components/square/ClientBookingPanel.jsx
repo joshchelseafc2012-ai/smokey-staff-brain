@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getStaff, createBooking } from '../../../services/squareService'
+import { getStaff, createBooking } from '../../services/squareService'
 
 export default function ClientBookingPanel({ selectedShop, onBookingCreated }) {
   const [showForm, setShowForm] = useState(false)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getBookings } from '../../../services/squareService'
+import { getBookings } from '../../services/squareService'
 
 export default function StaffDashboard({ selectedShop, staffName }) {
   const [bookings, setBookings] = useState([])
