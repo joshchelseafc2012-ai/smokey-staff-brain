@@ -1,30 +1,43 @@
 import { useState } from 'react'
-import { getQuickTopics } from '../config/brainConfig'
-import GuideModal from './GuideModal'
 import '../styles/Sidebar.css'
 
-const SAVED_GUIDES = [
-  'Smokey Skin Fade',
-  'Beard Shaping Basics',
-  'Daily Open/Close',
-  'Clean-Down Routine'
-]
+const PAGE_MENU = {
+  staff: [
+    { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+    { id: 'procedures', icon: '✂️', label: 'Procedures' },
+    { id: 'schedule', icon: '📅', label: 'Schedule' },
+    { id: 'checklist', icon: '✓', label: 'Checklist' },
+    { id: 'help', icon: '❓', label: 'Help' }
+  ],
+  owner: [
+    { id: 'dashboard', icon: '📈', label: 'Dashboard' },
+    { id: 'staff', icon: '👥', label: 'Staff' },
+    { id: 'inventory', icon: '📦', label: 'Inventory' },
+    { id: 'analytics', icon: '📊', label: 'Analytics' }
+  ],
+  client: [
+    { id: 'dashboard', icon: '🏠', label: 'Home' },
+    { id: 'booking', icon: '📅', label: 'Book' },
+    { id: 'mybookings', icon: '📋', label: 'My Bookings' },
+    { id: 'loyalty', icon: '🎁', label: 'Loyalty' },
+    { id: 'services', icon: '✂️', label: 'Services' }
+  ]
+}
 
-export default function Sidebar({ onQuickTopicClick, isOpen, onClose, onNewSession, brainType }) {
-  const [selectedGuide, setSelectedGuide] = useState(null)
-  
-  // Get quick topics for the current brain type
-  const quickTopicsLabels = getQuickTopics(brainType || 'staff');
-  
-  // Convert simple string array to topic objects with queries
-  const quickTopics = quickTopicsLabels.map((label, idx) => ({
-    id: `topic-${idx}`,
-    label: label,
-    query: label
-  }))
+export default function Sidebar({
+  brainType = 'staff',
+  currentPage,
+  onPageChange,
+  isOpen,
+  onClose,
+  onQuickTopicClick,
+  onNewSession
+}) {
+  const [showQuickTopics, setShowQuickTopics] = useState(false)
+  const menu = PAGE_MENU[brainType] || PAGE_MENU.staff
 
-  const handleNewSession = () => {
-    onNewSession()
+  const handlePageClick = (pageId) => {
+    onPageChange(pageId)
     onClose()
   }
 
@@ -34,59 +47,45 @@ export default function Sidebar({ onQuickTopicClick, isOpen, onClose, onNewSessi
 
       <div className="sidebar-content">
         <div className="sidebar-header">
-          <h2>Sidebar</h2>
+          <h2>Menu</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
+        {/* Page Navigation */}
         <div className="sidebar-section">
-          <button
-            className="sidebar-item session-btn"
-            onClick={handleNewSession}
-          >
-            ✨ +New Session
-          </button>
+          <h3 className="sidebar-heading">Pages</h3>
+          <div className="page-menu">
+            {menu.map(page => (
+              <button
+                key={page.id}
+                className={`sidebar-item page-item ${currentPage === page.id ? 'active' : ''}`}
+                onClick={() => handlePageClick(page.id)}
+              >
+                <span className="icon">{page.icon}</span>
+                <span className="label">{page.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="sidebar-section">
-          <h3 className="sidebar-heading">Quick Topics</h3>
-          <div className="quick-topics">
-            {quickTopics.map(topic => (
+        {/* Quick Topics (if available) */}
+        {onQuickTopicClick && (
+          <>
+            <div className="sidebar-divider" />
+            <div className="sidebar-section">
               <button
-                key={topic.id}
-                className="sidebar-item topic-item"
+                className="sidebar-item session-btn"
                 onClick={() => {
-                  onQuickTopicClick(topic.query)
+                  if (onNewSession) onNewSession()
                   onClose()
                 }}
               >
-                {topic.label}
+                ✨ +New Chat
               </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="sidebar-section">
-          <h3 className="sidebar-heading">Saved Guides</h3>
-          <div className="saved-guides">
-            {SAVED_GUIDES.map((guide, idx) => (
-              <button
-                key={idx}
-                className="sidebar-item guide-item"
-                onClick={() => setSelectedGuide(guide)}
-              >
-                {guide}
-              </button>
-            ))}
-          </div>
-        </div>
+            </div>
+          </>
+        )}
       </div>
-
-      {selectedGuide && (
-        <GuideModal
-          guideName={selectedGuide}
-          onClose={() => setSelectedGuide(null)}
-        />
-      )}
     </div>
   )
 }

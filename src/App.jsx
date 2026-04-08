@@ -1,112 +1,62 @@
 import { useState } from 'react'
 import LoginScreen from './components/LoginScreen'
-import StaffBrain from './brains/StaffBrain'
-import OwnerBrain from './brains/OwnerBrain'
-import ClientBrain from './brains/ClientBrain'
+import TopBar from './components/TopBar'
+import Sidebar from './components/Sidebar'
+import PageContainer from './components/PageContainer'
 import './styles/App.css'
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState(null)
   const [selectedShop, setSelectedShop] = useState('tolworth')
-  const [sessionMemory, setSessionMemory] = useState({
-    staffName: '',
-    userRole: '',
-    selectedShop: 'tolworth',
-    lastQuestions: []
-  })
+  const [currentPage, setCurrentPage] = useState('dashboard')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const handleLogin = (userData) => {
     setUser(userData)
-    setSessionMemory(prev => ({
-      ...prev,
-      staffName: userData.name,
-      userRole: userData.role,
-      selectedShop: 'tolworth'
-    }))
     setIsLoggedIn(true)
+    setCurrentPage('dashboard')
   }
 
   const handleLogout = () => {
     setIsLoggedIn(false)
     setUser(null)
-    setSelectedShop('tolworth')
-    setSessionMemory({
-      staffName: '',
-      userRole: '',
-      selectedShop: 'tolworth',
-      lastQuestions: []
-    })
+    setCurrentPage('dashboard')
+    setSidebarOpen(false)
   }
 
-  const handleShopChange = (shopId) => {
-    setSelectedShop(shopId)
-    setSessionMemory(prev => ({
-      ...prev,
-      selectedShop: shopId
-    }))
-  }
-
-  const updateLastQuestions = (question) => {
-    setSessionMemory(prev => ({
-      ...prev,
-      lastQuestions: [question, ...prev.lastQuestions].slice(0, 5)
-    }))
-  }
-
-  // Determine which brain to show based on user role
-  const getActiveBrain = () => {
-    if (!user) return null
-    return user.role === 'owner' ? 'owner'
-         : user.role === 'client' ? 'client'
-         : 'staff'
-  }
-
-  const activeBrain = getActiveBrain()
-
-  const renderBrain = () => {
-    switch (activeBrain) {
-      case 'owner':
-        return (
-          <OwnerBrain
-            user={user}
-            onLogout={handleLogout}
-            selectedShop={selectedShop}
-            onShopChange={handleShopChange}
-            onQuestionAsked={updateLastQuestions}
-          />
-        )
-      case 'client':
-        return (
-          <ClientBrain
-            user={user}
-            onLogout={handleLogout}
-            selectedShop={selectedShop}
-            onShopChange={handleShopChange}
-            onQuestionAsked={updateLastQuestions}
-          />
-        )
-      case 'staff':
-      default:
-        return (
-          <StaffBrain
-            user={user}
-            onLogout={handleLogout}
-            selectedShop={selectedShop}
-            onShopChange={handleShopChange}
-            onQuestionAsked={updateLastQuestions}
-          />
-        )
-    }
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={handleLogin} />
   }
 
   return (
-    <div id="app">
-      {!isLoggedIn ? (
-        <LoginScreen onLogin={handleLogin} />
-      ) : (
-        renderBrain()
-      )}
+    <div className="app">
+      <TopBar
+        selectedShop={selectedShop}
+        onShopChange={setSelectedShop}
+        onLogout={handleLogout}
+        user={user}
+        onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+      />
+
+      <div className="app-container">
+        <Sidebar
+          brainType={user.role}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+
+        <main className="main-content">
+          <PageContainer
+            brainType={user.role}
+            currentPage={currentPage}
+            selectedShop={selectedShop}
+            user={user}
+          />
+        </main>
+      </div>
     </div>
   )
 }

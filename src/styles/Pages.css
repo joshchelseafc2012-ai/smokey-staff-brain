@@ -1,0 +1,499 @@
+.page {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--text-primary, #000);
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #C9A84C;
+  margin: 0;
+}
+
+/* Chat Section */
+.chat-section {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+}
+
+.chat-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.chat-input-section {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chat-input-section textarea {
+  flex: 1;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  transition: all 0.2s;
+}
+
+.chat-input-section textarea:focus {
+  outline: none;
+  border-color: #C9A84C;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+
+.chat-input-section button {
+  padding: 10px 20px;
+  background: #C9A84C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chat-input-section button:hover:not(:disabled) {
+  background: #b39037;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+}
+
+.chat-input-section button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Info Box */
+.info-box {
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-left: 4px solid #C9A84C;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.info-box h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--text-primary, #000);
+}
+
+.info-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.info-box li {
+  margin: 8px 0;
+  color: var(--text-secondary, #666);
+}
+
+.info-box.warning {
+  background: rgba(255,152,0,0.08);
+  border-color: rgba(255,152,0,0.2);
+  border-left-color: #FF9800;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary, #666);
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Schedule List */
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.schedule-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.schedule-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.time-block {
+  font-size: 24px;
+  font-weight: 700;
+  color: #C9A84C;
+  min-width: 80px;
+}
+
+.booking-details {
+  flex: 1;
+}
+
+.booking-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: var(--text-primary, #000);
+}
+
+.booking-details p {
+  margin: 0 0 8px 0;
+  color: var(--text-secondary, #666);
+  font-size: 14px;
+}
+
+.duration {
+  font-size: 12px;
+  color: var(--text-secondary, #666);
+}
+
+/* Procedures Grid */
+.procedures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.procedure-card {
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.procedure-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.procedure-steps {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.procedure-steps li {
+  margin: 12px 0;
+  color: var(--text-secondary, #666);
+  line-height: 1.5;
+}
+
+/* Checklist */
+.checklist-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: var(--bg-secondary, #f9f9f9);
+  border-radius: 12px;
+}
+
+.checklist-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  background: #eee;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  background: #C9A84C;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--text-secondary, #666);
+  margin-bottom: 16px;
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.checklist-item:hover {
+  background: rgba(201,168,76,0.1);
+}
+
+.checklist-item input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.checklist-item.checked {
+  opacity: 0.6;
+}
+
+.checklist-item span {
+  flex: 1;
+}
+
+/* Staff Row */
+.staff-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.staff-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  align-items: center;
+}
+
+.staff-name {
+  font-weight: 600;
+  color: var(--text-primary, #000);
+}
+
+.staff-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.staff-stat .label {
+  font-size: 11px;
+  color: var(--text-secondary, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.staff-stat .value {
+  font-weight: 600;
+  color: #C9A84C;
+}
+
+/* Bookings List */
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.booking-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  align-items: center;
+}
+
+.booking-date {
+  min-width: 120px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.booking-info {
+  flex: 1;
+}
+
+.booking-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+}
+
+.booking-info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary, #666);
+}
+
+/* Services Grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.services-grid .card {
+  cursor: pointer;
+}
+
+/* FAQs */
+.faqs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.faq-item {
+  padding: 16px;
+  background: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+}
+
+.faq-item h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--text-primary, #000);
+}
+
+.faq-item p {
+  margin: 0;
+  color: var(--text-secondary, #666);
+  line-height: 1.5;
+}
+
+/* Insights */
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 8px;
+}
+
+.insights p {
+  margin: 0;
+  color: var(--text-secondary, #666);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page {
+    padding: 20px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .page-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .staff-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chat-input-section {
+    flex-direction: column;
+  }
+
+  .chat-input-section button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-row {
+    grid-template-columns: 1fr;
+  }
+}
